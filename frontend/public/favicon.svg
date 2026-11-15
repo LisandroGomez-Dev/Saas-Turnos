@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="22" fill="#00685f"/>
+  <rect x="2" y="2" width="96" height="96" rx="20" fill="none" stroke="#009185" stroke-width="2"/>
+  <!-- Diente blanco estilizado -->
+  <path d="M26 24 C28 20 40 18 50 24 C60 18 72 20 74 24 C82 32 80 50 72 64 C68 72 68 80 64 80 C60 80 58 70 56 60 C53 54 47 54 44 60 C42 70 40 80 36 80 C32 80 32 72 28 64 C20 50 18 32 26 24 Z" fill="#ffffff"/>
+  <!-- Brillo / Estrella -->
+  <polygon points="74,18 76.5,23.5 82,24 77.5,27.5 79,33 74,30 69,33 70.5,27.5 66,24 71.5,23.5" fill="#6cf8bb"/>
+</svg>
+
