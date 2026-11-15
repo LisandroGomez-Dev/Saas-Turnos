@@ -1,0 +1,4 @@
+# Excluir el cliente frontend y archivos de configuración de las estadísticas de lenguaje de GitHub Linguist
+# para reflejar correctamente que el núcleo del proyecto es Backend en Java 21 + Spring Boot 3.
+frontend/** linguist-detectable=false
+*.md linguist-detectable=false
