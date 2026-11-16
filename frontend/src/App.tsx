@@ -117,7 +117,7 @@ export const App: React.FC = () => {
   };
 
   const handleChangePin = (nuevoPin: string) => {
-    localStorage.setItem('dra_admin_pin', nuevoPin);
+    localStorage.setItem('saas_admin_pin', nuevoPin);
     setAdminPin(nuevoPin);
   };
 
@@ -134,6 +134,7 @@ export const App: React.FC = () => {
   const [servicios, setServicios] = useState<Servicio[]>([]);
   const [profesionales, setProfesionales] = useState<Profesional[]>([]);
   const [loading, setLoading] = useState(true);
+  const [usandoFallback, setUsandoFallback] = useState(false);
 
   const [turnoConfirmado, setTurnoConfirmado] = useState<Turno | null>(null);
   const [conflictMsg, setConflictMsg] = useState<string | null>(null);
@@ -267,11 +268,19 @@ export const App: React.FC = () => {
       setNegocio(neg);
       setServicios(servs);
       setProfesionales(profs);
+      setUsandoFallback(false);
     } catch {
       loadFallbackData(currentNegocioId);
+      setUsandoFallback(true);
     } finally {
       setLoading(false);
     }
+  }, [currentNegocioId, loadFallbackData]);
+
+  const handleActivarVistaPrevia = useCallback(() => {
+    loadFallbackData(currentNegocioId);
+    setUsandoFallback(true);
+    setLoading(false);
   }, [currentNegocioId, loadFallbackData]);
 
   useEffect(() => {
@@ -391,6 +400,29 @@ export const App: React.FC = () => {
 
       {/* Contenido Principal */}
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6">
+        {loading && !negocio && (
+          <div className="max-w-lg mx-auto my-12 bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200 dark:border-zinc-800 p-8 text-center shadow-sm space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-950/50 border border-teal-200 dark:border-teal-800 flex items-center justify-center mx-auto">
+              <RefreshCw className="w-6 h-6 text-teal-700 dark:text-teal-400 animate-spin" />
+            </div>
+            <div className="space-y-1.5">
+              <h2 className="text-base font-extrabold text-slate-900 dark:text-white">
+                Conectando con la API demo (Spring Boot + PostgreSQL)
+              </h2>
+              <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
+                Si el servidor gratuito estaba en reposo, el primer arranque puede demorar entre 30 y 50 segundos en despertar.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleActivarVistaPrevia}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-zinc-700 transition-colors cursor-pointer"
+            >
+              <span>Abrir vista previa local mientras conecta</span>
+            </button>
+          </div>
+        )}
+
         {negocio && (
           <>
             {/* VISTA CLIENTE PÚBLICO */}
@@ -600,10 +632,11 @@ export const App: React.FC = () => {
           <div className="flex items-center justify-center gap-2">
             <span>{negocio.nombre}</span>
             <span>•</span>
-            <span>{negocio.direccion || 'Linera 2082, Resistencia, Chaco'}</span>
+            <span>{negocio.direccion || 'Av. Santa Fe 3210, Piso 4 Depto B'}</span>
           </div>
           <p className="text-[11px] text-slate-400 dark:text-zinc-600">
-            © {new Date().getFullYear()} Consultorio Odontológico. Sistema de turnos protegido contra ausentismo.
+            © {new Date().getFullYear()} Consultorio Odontológico Sonrisa Plena (Demo).{' '}
+            {usandoFallback ? 'Vista previa local (sin conexión al backend).' : 'Conectado en vivo a Spring Boot + PostgreSQL.'}
           </p>
           <div className="pt-2">
             <button

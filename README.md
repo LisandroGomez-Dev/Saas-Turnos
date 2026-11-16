@@ -9,6 +9,9 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwind-css&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)
+![Swagger](https://img.shields.io/badge/OpenAPI-Swagger_UI-85EA2D?logo=swagger&logoColor=black)
+
+> **💡 Modo Demo & Despliegue Cloud:** El proyecto incluye datos iniciales precargados por Flyway (`V2__seed_demo_data.sql`), modo sandbox interactivo para Mercado Pago y documentación OpenAPI lista para explorar en `/swagger-ui.html`.
 
 ---
 
@@ -121,13 +124,13 @@ Elimina constructores con docenas de parámetros y evita el armado arbitrario de
 
 | Capa | Tecnologías |
 | :--- | :--- |
-| **Backend Core** | Java 21 LTS, Spring Boot 3.3.5 |
+| **Backend Core** | Java 21 LTS, Spring Boot 3.3.5, OpenAPI 3 / Swagger UI |
 | **Persistencia & ORM** | Spring Data JPA, Hibernate 6, PostgreSQL 16, HikariCP |
 | **Migraciones DB** | Flyway (`V1__init_schema.sql`, `V2__seed_demo_data.sql`) |
 | **Seguridad & Pagos** | HMAC-SHA256 Signature Verification, Mercado Pago Checkout Pro REST API |
 | **Frontend SPA** | React 18, TypeScript 5.6, Vite 5, React Router 6 |
 | **Estilos & UI** | Tailwind CSS 3.4, Lucide React (Iconografía moderna de alto contraste) |
-| **Infraestructura** | Docker & Docker Compose, Maven Wrapper |
+| **Infraestructura** | Docker & Docker Compose, Render (`render.yaml`), Vercel (`vercel.json`), Maven |
 
 ---
 
@@ -194,7 +197,7 @@ cd backend
 # En Linux/macOS:
 ./mvnw spring-boot:run
 ```
-El servidor backend quedará disponible en: `http://localhost:8080`.
+El servidor backend quedará disponible en: `http://localhost:8080` y la documentación interactiva **Swagger UI** en: `http://localhost:8080/swagger-ui.html`.
 
 Para ejecutar la suite de pruebas unitarias:
 ```bash
