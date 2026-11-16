@@ -11,11 +11,26 @@
 ![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)
 ![Swagger](https://img.shields.io/badge/OpenAPI-Swagger_UI-85EA2D?logo=swagger&logoColor=black)
 
-> **💡 Modo Demo & Despliegue Cloud:** El proyecto incluye datos iniciales precargados por Flyway (`V2__seed_demo_data.sql`), modo sandbox interactivo para Mercado Pago y documentación OpenAPI lista para explorar en `/swagger-ui.html`.
+---
+
+## 🌐 Demo en Vivo & API Interactiva
+
+Podés probar el sistema completo en funcionamiento sin clonar ni instalar nada:
+
+- **Aplicación Web (Frontend React + Backend en vivo):** [https://saas-turnos-six.vercel.app](https://saas-turnos-six.vercel.app)
+- **Documentación Interactiva API REST (Swagger UI):** [https://saas-turnos-backend.onrender.com/swagger-ui.html](https://saas-turnos-backend.onrender.com/swagger-ui.html)
+- **Health Check:** [https://saas-turnos-backend.onrender.com/actuator/health](https://saas-turnos-backend.onrender.com/actuator/health)
+
+### Cómo probar el flujo completo (1 minuto)
+1. **Vista Paciente:** Elegí un servicio de *Consultorio Odontológico Sonrisa Plena*, seleccioná fecha/horario y reservá un turno. Si el servicio requiere seña, podés simular la acreditación de Mercado Pago en modo Sandbox.
+2. **Panel de Administración (PIN `1234`):** En el pie de página tocá **"Acceso Exclusivo Profesionales (Demo)"**, ingresá el PIN **`1234`** y revisá la **Agenda de Turnos** (cobrar/completar atención o marcar ausente) y las métricas en **Control de Caja**.
+
+> **⏳ Nota sobre servidor gratuito:** El backend Spring Boot + PostgreSQL está alojado en Render (tier gratuito) + Supabase. Si la instancia estaba en reposo, la **primera petición** puede demorar entre **30 y 50 segundos** en despertar (la interfaz avisa mientras conecta).
 
 ---
 
 ## 📌 Tabla de Contenidos
+- [🌐 Demo en Vivo & API Interactiva](#-demo-en-vivo--api-interactiva)
 - [🎯 Problema y Propuesta de Valor](#-problema-y-propuesta-de-valor)
 - [✨ Características Principales](#-características-principales)
 - [🏛️ Arquitectura y Patrones de Diseño](#️-arquitectura-y-patrones-de-diseño)
