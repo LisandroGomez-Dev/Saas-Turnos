@@ -15,9 +15,7 @@ import {
   Sparkles,
   CreditCard,
   Lock,
-  ArrowLeft,
 } from 'lucide-react';
-import { getLandingUrl, volverALanding } from '../../utils/navigation';
 
 interface ConfirmacionTurnoViewProps {
   turno: Turno;
@@ -318,16 +316,6 @@ export const ConfirmacionTurnoView: React.FC<ConfirmacionTurnoViewProps> = ({
           <RotateCcw className="w-4 h-4" />
           <span>Reservar otro turno o ir al inicio del turnero</span>
         </button>
-
-        <a
-          href={getLandingUrl()}
-          onClick={volverALanding}
-          target="_top"
-          className="w-full min-h-[46px] py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-emerald-800 hover:text-emerald-950 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center gap-2 transition-colors border border-emerald-300 shadow-2xs cursor-pointer"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Volver al inicio del consultorio</span>
-        </a>
       </div>
     </div>
   );

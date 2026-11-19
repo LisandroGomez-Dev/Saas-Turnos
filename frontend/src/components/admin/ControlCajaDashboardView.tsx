@@ -309,8 +309,8 @@ export const ControlCajaDashboardView: React.FC<ControlCajaDashboardViewProps> =
       {/* Grid: Métodos de Cobranza & Volumen */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
         {/* Desglose de Cobranza */}
-        <div className="p-6 rounded-2xl border-2 border-slate-300 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-between space-y-4">
-          <div className="flex items-center justify-between border-b-2 border-slate-100 pb-3 dark:border-zinc-800">
+        <div className="p-6 rounded-2xl border-2 border-slate-300 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm flex flex-col space-y-5">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-100 pb-3 dark:border-zinc-800">
             <h3 className="font-black text-base sm:text-lg text-slate-950 dark:text-zinc-100 flex items-center gap-2">
               <CreditCard className="w-5 h-5 text-teal-700" />
               <span>Desglose de Cobranza</span>
