@@ -22,9 +22,7 @@ import {
   LayoutDashboard,
   Lock,
   LogOut,
-  ArrowLeft,
 } from 'lucide-react';
-import { getLandingUrl, volverALanding } from './utils/navigation';
 
 export const App: React.FC = () => {
   const [adminPin, setAdminPin] = useState<string>(() => {
@@ -325,17 +323,6 @@ export const App: React.FC = () => {
           <div className="flex items-center gap-2">
             {modoVista === 'admin' ? (
               <>
-                <a
-                  href={getLandingUrl()}
-                  onClick={volverALanding}
-                  target="_top"
-                  className="min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 text-slate-700 hover:text-slate-950 dark:text-zinc-300 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 transition-colors border border-slate-300 dark:border-zinc-700 cursor-pointer"
-                  title="Volver al inicio del consultorio"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Volver a la web</span>
-                </a>
-
                 <button
                   type="button"
                   onClick={() => setModoVista('publico')}
@@ -357,18 +344,6 @@ export const App: React.FC = () => {
               </>
             ) : (
               <>
-                {/* Botón Volver a la Landing Page para Pacientes */}
-                <a
-                  href={getLandingUrl()}
-                  onClick={volverALanding}
-                  target="_top"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-teal-900 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50 transition-colors border border-teal-200/80 dark:border-teal-800 shrink-0 cursor-pointer"
-                  title="Volver al inicio del consultorio"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  <span>Volver a la web</span>
-                </a>
-
                 {/* Contacto Directo WhatsApp */}
                 {negocio && (
                   <a
