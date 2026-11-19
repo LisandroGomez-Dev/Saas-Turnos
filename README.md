@@ -39,6 +39,7 @@ Podés probar el sistema completo en funcionamiento sin clonar ni instalar nada:
 - [🚀 Instalación y Puesta en Marcha](#-instalación-y-puesta-en-marcha)
 - [🔒 Seguridad y Webhooks Idempotentes](#-seguridad-y-webhooks-idempotentes)
 - [📡 API REST - Endpoints Principales](#-api-rest---endpoints-principales)
+- [⚠️ Limitaciones Conocidas](#️-limitaciones-conocidas)
 - [🤝 Contribución y Buenas Prácticas](#-contribución-y-buenas-prácticas)
 
 ---
@@ -93,8 +94,7 @@ El backend fue diseñado bajo principios de **Clean Architecture**, **Domain-Dri
 backend/src/main/java/com/saasturnos/backend/
 ├── application/
 │   ├── dto/                    # Records inmutables Java 21 (Data Transfer Objects)
-│   ├── scheduler/              # Tareas programadas (Expiración de turnos no pagados)
-│   ├── service/                # Casos de uso transaccionales (@Transactional)
+│   ├── service/                # Casos de uso transaccionales (@Transactional) y scheduler de expiración de turnos
 │   └── strategy/               # Patrón Strategy (Liquidación de cobros)
 ├── domain/
 │   ├── exception/              # Excepciones de negocio personalizadas
@@ -156,9 +156,9 @@ Saas-Turnos/
 ├── backend/                        # Código fuente del Backend (Spring Boot 3 + Java 21)
 │   ├── src/main/java/              # Capas de Aplicación, Dominio e Infraestructura
 │   ├── src/main/resources/
-│   │   ├── application.properties  # Configuración principal (Hikari, JPA, MP)
+│   │   ├── application.yml         # Configuración principal (Hikari, JPA, MP)
 │   │   └── db/migration/           # Scripts SQL versionados de Flyway
-│   ├── src/test/java/              # Pruebas unitarias de Disponibilidad, Webhooks y Patrones
+│   ├── src/test/java/              # Pruebas unitarias de Disponibilidad y Webhooks (incluye validación de patrones de dominio)
 │   ├── pom.xml                     # Dependencias Maven
 │   └── mvnw.cmd / mvnw             # Maven Wrapper sin requerir instalación global
 ├── frontend/                       # Código fuente del Frontend (React + Vite + Tailwind)
@@ -254,26 +254,39 @@ El backend:
 | Método | Endpoint | Descripción |
 | :--- | :--- | :--- |
 | `GET` | `/api/v1/negocios/slug/{slug}` | Obtiene los datos públicos del negocio para el turnero |
-| `GET` | `/api/v1/disponibilidad/slug/{slug}?servicioId={id}&fecha={YYYY-MM-DD}` | Calcula los slots libres sin tiempos muertos |
-| `POST` | `/api/v1/turnos/reservar/{slug}` | Crea una reserva pública (reserva de slot con bloqueo optimista) |
-| `GET` | `/api/v1/turnos/codigo/{codigo}` | Obtiene los detalles de un turno por su código alfa-numérico |
-| `POST` | `/api/v1/turnos/codigo/{codigo}/cancelar` | Cancela un turno respetando las horas mínimas de anticipación |
+| `GET` | `/api/v1/public/negocios/{slug}/disponibilidad?servicioId={id}&profesionalId={id}&fecha={YYYY-MM-DD}` | Calcula los slots libres sin tiempos muertos (`profesionalId` es opcional) |
+| `POST` | `/api/v1/public/negocios/{slug}/reservas` | Crea una reserva pública (reserva de slot con bloqueo optimista) |
+| `GET` | `/api/v1/public/reservas/{codigoReserva}` | Obtiene los detalles de un turno por su código alfanumérico |
+| `POST` | `/api/v1/public/reservas/{codigoReserva}/cancelar` | Cancela un turno respetando las horas mínimas de anticipación |
 
 ### Pagos y Mercado Pago
 | Método | Endpoint | Descripción |
 | :--- | :--- | :--- |
-| `POST` | `/api/v1/pagos/mercadopago/preferencia/{codigo}` | Genera la preferencia de pago en Mercado Pago Checkout Pro |
+| `POST` | `/api/v1/public/reservas/{codigoReserva}/preferencia-mp` | Genera la preferencia de pago en Mercado Pago Checkout Pro |
 | `POST` | `/api/v1/pagos/mercadopago/webhook` | Webhook idempotente con verificación de firma HMAC-SHA256 |
-| `POST` | `/api/v1/pagos/mercadopago/sandbox/aprobar/{codigo}` | Endpoint sandbox para simular acreditación de señas en desarrollo |
+| `POST` | `/api/v1/public/reservas/{codigoReserva}/simular-pago-mp` | Simula la acreditación de una seña (solo demo/sandbox) |
 
 ### Panel de Administración & Control de Caja
 | Método | Endpoint | Descripción |
 | :--- | :--- | :--- |
-| `GET` | `/api/v1/turnos/negocio/{id}?fechaDesde={...}&fechaHasta={...}` | Lista turnos de la agenda en el rango de fechas |
-| `POST` | `/api/v1/turnos/negocio/{id}/manual` | Da de alta un turno manual en mostrador |
-| `POST` | `/api/v1/turnos/negocio/{id}/{turnoId}/completar` | Completa atención liquidando saldo vía **Patrón Strategy** |
-| `POST` | `/api/v1/turnos/negocio/{id}/{turnoId}/marcar-ausente` | Marca cliente ausente y protege la seña como ingreso |
-| `GET` | `/api/v1/metricas/caja/negocio/{id}?fechaDesde={...}&fechaHasta={...}` | Resumen financiero completo de caja y rendimiento |
+| `GET` | `/api/v1/negocios/{negocioId}/turnos` | Lista los turnos de la agenda |
+| `POST` | `/api/v1/negocios/{negocioId}/turnos/manual` | Da de alta un turno manual en mostrador |
+| `POST` | `/api/v1/negocios/{negocioId}/turnos/{turnoId}/atender` | Completa la atención liquidando el saldo vía **Patrón Strategy** |
+| `POST` | `/api/v1/negocios/{negocioId}/turnos/{turnoId}/ausente` | Marca al cliente ausente y retiene la seña como ingreso |
+| `POST` | `/api/v1/negocios/{negocioId}/turnos/{turnoId}/cancelar` | Cancela un turno desde el panel |
+| `GET` | `/api/v1/negocios/{negocioId}/metricas-caja?desde={YYYY-MM-DD}&hasta={YYYY-MM-DD}` | Resumen financiero de caja y rendimiento |
+
+> La referencia completa y siempre actualizada de la API (servicios, profesionales, horarios y bloqueos incluidos) está en **Swagger UI**.
+
+---
+
+## ⚠️ Limitaciones Conocidas
+
+Este proyecto se publica como demo y portfolio, por lo que tiene alcances acotados a propósito:
+
+- **Autenticación del panel de administración:** el acceso por PIN (`1234` por defecto) se valida solo en el frontend y los endpoints de administración del backend no exigen autenticación. Para uso real habría que incorporar Spring Security con login y roles (por ejemplo, JWT).
+- **Endpoint de simulación de pago:** `simular-pago-mp` existe para poder probar el flujo sin cobrar y debería deshabilitarse en producción.
+- **Cobertura de tests:** hay pruebas unitarias de disponibilidad, webhooks y patrones de dominio; faltan pruebas de integración end-to-end del flujo completo.
 
 ---
 
