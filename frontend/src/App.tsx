@@ -144,7 +144,7 @@ export const App: React.FC = () => {
       slug: 'odontologia-sonrisa-plena',
       rubro: 'ODONTOLOGIA',
       descripcion: 'Atención odontológica integral, estética dental, ortodoncia y prevención.',
-      telefonoWhatsapp: '5491166778899',
+      telefonoWhatsapp: '5493795074605',
       direccion: 'Av. Santa Fe 3210, Piso 4 Depto B',
       logoUrl: null,
       cancelacionHorasMinimas: 24,
